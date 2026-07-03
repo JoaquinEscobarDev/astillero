@@ -6,29 +6,40 @@
 
   <% if (estaAutenticado) { %>
     <div class="tarjeta">
-      <h2>Subir fotos</h2>
+      <h2>Subir fotos y videos</h2>
       <p class="texto-ayuda">
-        Elige fotos desde tu celular o cámara. No te preocupes por el tamaño, la página las prepara sola.
+        Elige fotos o videos desde tu celular. No te preocupes por el tamaño, la página los prepara sola.
       </p>
       <form action="/carpetas/<%= carpeta.id %>/fotos" method="POST" enctype="multipart/form-data" class="formulario" id="formulario-subida">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
         <label for="fotos" class="zona-arrastrar" id="zona-arrastrar">
-          <span>Toca aquí para elegir fotos, o arrástralas a esta zona</span>
-          <input type="file" id="fotos" name="fotos" accept="image/*" multiple />
+          <span>Toca aquí para elegir fotos o videos, o arrástralos a esta zona</span>
+          <input type="file" id="fotos" name="fotos" accept="image/*,video/*" multiple />
         </label>
-        <button type="submit" class="boton boton-primario boton-grande">Subir fotos</button>
+        <button type="submit" class="boton boton-primario boton-grande">Subir</button>
       </form>
     </div>
   <% } %>
 
   <% if (fotos.length === 0) { %>
-    <p class="texto-ayuda">Todavía no hay fotos en esta carpeta.</p>
+    <p class="texto-ayuda">Todavía no hay fotos ni videos en esta carpeta.</p>
   <% } %>
 
   <div class="grilla-fotos">
     <% fotos.forEach(function (foto) { %>
       <a href="/fotos/<%= foto.id %>" class="miniatura">
-        <img src="/media/thumb/<%= foto.ruta_thumbnail %>" alt="<%= foto.descripcion || carpeta.nombre %>" loading="lazy" />
+        <% if (foto.ruta_thumbnail) { %>
+          <img src="/media/thumb/<%= foto.ruta_thumbnail %>" alt="<%= foto.descripcion || carpeta.nombre %>" loading="lazy" />
+        <% } else { %>
+          <div class="miniatura-generica">
+            <svg class="icono-timon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 4a1 1 0 0 1 1 1v1.09a4 4 0 0 1 2.9 1.68l.94-.55a1 1 0 0 1 1 1.73l-.94.55a4 4 0 0 1 0 3.4l.94.55a1 1 0 1 1-1 1.73l-.94-.55A4 4 0 0 1 13 17.91V19a1 1 0 1 1-2 0v-1.09a4 4 0 0 1-2.9-1.68l-.94.55a1 1 0 1 1-1-1.73l.94-.55a4 4 0 0 1 0-3.4l-.94-.55a1 1 0 0 1 1-1.73l.94.55A4 4 0 0 1 11 7.09V6a1 1 0 0 1 1-1Zm0 6a2 2 0 1 0 2 2 2 2 0 0 0-2-2Z" fill="currentColor"/>
+            </svg>
+          </div>
+        <% } %>
+        <% if (foto.tipo === 'video') { %>
+          <span class="icono-reproducir" aria-hidden="true">&#9654;</span>
+        <% } %>
       </a>
     <% }); %>
   </div>

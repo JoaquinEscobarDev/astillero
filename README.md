@@ -1,20 +1,30 @@
 # El Astillero
 
-Galería personal (no e-commerce) para exhibir fotos de botes a escala en madera. Node.js + Express +
-EJS, con SQLite como base de datos (un solo archivo, sin servidor de base de datos separado).
+Galería personal (no e-commerce) para exhibir fotos y videos de botes a escala en madera.
+Node.js + Express + EJS, con SQLite como base de datos (un solo archivo, sin servidor de base
+de datos separado). La vista de carpetas, fotos y videos es pública (sin login, pero no
+indexada en buscadores); solo crear, subir, renombrar, editar y borrar requiere iniciar sesión.
 
 ## Stack
 
 - **Backend:** Node.js + Express, vistas renderizadas en el servidor con EJS.
-- **Base de datos:** SQLite vía `better-sqlite3` (archivo único en `data/astillero.sqlite`).
-- **Imágenes:** `sharp` genera automáticamente una miniatura (400x400) y una versión web
+- **Base de datos:** SQLite vía `better-sqlite3` (archivo único, ruta configurable con
+  `DATABASE_FILE`).
+- **Fotos:** `sharp` genera automáticamente una miniatura (400x400) y una versión web
   comprimida (máx. 1600px) de cada foto subida; el archivo original se guarda aparte y solo se
   sirve al pedir "ver tamaño completo".
+- **Videos:** se guarda el archivo tal cual se sube (sin recomprimir) y se reproduce con la
+  etiqueta `<video>` nativa del navegador; la miniatura de la grilla se genera extrayendo un
+  fotograma con `ffmpeg` (vía `ffmpeg-static`, un binario propio que no depende de que el
+  servidor tenga ffmpeg instalado). Si la extracción falla por algún motivo, se muestra un
+  ícono genérico en vez de la miniatura, sin romper la subida.
 - **Sesiones:** almacén de sesiones propio sobre la misma base SQLite (sin dependencias nativas
   adicionales).
 - **Seguridad:** bcrypt para contraseñas, protección CSRF (`csrf-csrf`), cabeceras de seguridad
   (`helmet`), límite de intentos de login (por cuenta y por IP), validación real de tipo de
-  archivo (no solo por extensión), nombres de archivo aleatorios, `robots.txt` con disallow.
+  archivo (no solo por extensión), nombres de archivo aleatorios, `robots.txt` con disallow. Las
+  subidas se procesan desde disco (no en memoria) para soportar videos grandes sin agotar la
+  RAM del servidor.
 
 ## Requisitos
 
@@ -56,12 +66,12 @@ src/config/                Configuración, conexión a SQLite, esquema y almacé
 src/middleware/             Autenticación, CSRF, cabeceras de seguridad, límite de intentos, subida
 src/models/                 Acceso a datos (usuarios, carpetas, fotos)
 src/routes/                 Rutas de Express (auth, páginas, carpetas, fotos, medios)
-src/services/imageService.js  Procesamiento de imágenes con sharp
+src/services/mediaService.js  Procesamiento de fotos (sharp) y videos (ffmpeg)
 src/scripts/crear-usuario.js  Script para crear usuarios
 views/                       Plantillas EJS
 public/                      CSS, JS del cliente, robots.txt
-storage/original|thumb|web   Archivos de imagen (fuera del webroot público; se sirven solo
-                             autenticado vía /media/:tipo/:archivo)
+storage/original|thumb|web   Archivos de foto/video (fuera del webroot público; se sirven
+                             vía /media/:tipo/:archivo, sin requerir login)
 data/                        Base de datos SQLite (no se sube al repositorio)
 ```
 
@@ -99,6 +109,11 @@ usuario), para que sobrevivan a los redespliegues.
    ```
 7. Verifica que la carpeta persistente (`~/astillero-datos`) tenga permisos de escritura y que
    no tenga permisos de ejecución de scripts.
+8. Prueba subir un video después de desplegar. La miniatura de video depende de `ffmpeg-static`
+   (un binario que se descarga solo al hacer `npm install`, específico para Linux en el
+   servidor). Si el hosting compartido restringe la ejecución de binarios propios, la subida de
+   videos seguirá funcionando igual, solo que sin miniatura (se muestra un ícono genérico en su
+   lugar) — no es un error, es el comportamiento esperado si ffmpeg no puede ejecutarse ahí.
 
 ### Respaldos
 
@@ -114,8 +129,9 @@ usuario), para que sobrevivan a los redespliegues.
 - Pensado para un usuario con poca experiencia técnica: textos grandes (mínimo 18px), botones
   táctiles amplios (mínimo 44x44px), sin pasos ocultos, y confirmaciones explícitas ("Sí" / "No")
   antes de borrar cualquier cosa.
-- El límite técnico de tamaño por foto (variable `MAX_FOTO_MB`, 40MB por defecto) es solo una
-  protección del servidor; el usuario nunca necesita pensar en el peso del archivo.
+- El límite técnico de tamaño (`MAX_FOTO_MB`, 40MB por defecto para fotos; `MAX_VIDEO_MB`,
+  200MB por defecto para videos) es solo una protección del servidor; el usuario nunca necesita
+  pensar en el peso del archivo.
 - La columna `descripcion` de la tabla `fotos` queda lista para que, en una fase futura, se
   autocomplete con IA (ver la sección 9 del documento de requisitos original). No hay ninguna
   integración de IA implementada en esta versión.

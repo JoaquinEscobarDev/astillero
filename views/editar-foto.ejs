@@ -5,7 +5,9 @@
 
   <div class="tarjeta tarjeta-angosta">
     <h1>Editar descripción</h1>
-    <img src="/media/thumb/<%= foto.ruta_thumbnail %>" alt="" class="vista-previa-chica" />
+    <% if (foto.ruta_thumbnail) { %>
+      <img src="/media/thumb/<%= foto.ruta_thumbnail %>" alt="" class="vista-previa-chica" />
+    <% } %>
     <form action="/fotos/<%= foto.id %>/editar" method="POST" class="formulario">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
       <label for="descripcion">Descripción (opcional)</label>

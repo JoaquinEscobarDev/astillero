@@ -2,8 +2,10 @@
 <%- include('partials/header') %>
 
   <div class="tarjeta tarjeta-angosta tarjeta-confirmar">
-    <h1>¿Seguro que quieres borrar esta foto?</h1>
-    <img src="/media/thumb/<%= foto.ruta_thumbnail %>" alt="" class="vista-previa-chica" />
+    <h1>¿Seguro que quieres borrar <%= foto.tipo === 'video' ? 'este video' : 'esta foto' %>?</h1>
+    <% if (foto.ruta_thumbnail) { %>
+      <img src="/media/thumb/<%= foto.ruta_thumbnail %>" alt="" class="vista-previa-chica" />
+    <% } %>
     <p class="texto-ayuda">Esto no se puede deshacer.</p>
     <div class="confirmar-acciones">
       <form action="/fotos/<%= foto.id %>/eliminar" method="POST">

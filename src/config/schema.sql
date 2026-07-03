@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS carpetas (
 CREATE TABLE IF NOT EXISTS fotos (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   carpeta_id INTEGER NOT NULL REFERENCES carpetas(id) ON DELETE CASCADE,
+  tipo TEXT NOT NULL DEFAULT 'foto' CHECK (tipo IN ('foto', 'video')),
   nombre_archivo TEXT NOT NULL,
   ruta_original TEXT NOT NULL,
   ruta_thumbnail TEXT NOT NULL,

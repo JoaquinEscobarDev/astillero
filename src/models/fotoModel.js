@@ -10,13 +10,13 @@ function buscarPorId(id) {
   return db.prepare('SELECT * FROM fotos WHERE id = ?').get(id);
 }
 
-function crear({ carpetaId, nombreArchivo, rutaOriginal, rutaThumbnail, rutaWeb, descripcion }) {
+function crear({ carpetaId, tipo, nombreArchivo, rutaOriginal, rutaThumbnail, rutaWeb, descripcion }) {
   const info = db
     .prepare(
-      `INSERT INTO fotos (carpeta_id, nombre_archivo, ruta_original, ruta_thumbnail, ruta_web, descripcion)
-       VALUES (?, ?, ?, ?, ?, ?)`
+      `INSERT INTO fotos (carpeta_id, tipo, nombre_archivo, ruta_original, ruta_thumbnail, ruta_web, descripcion)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`
     )
-    .run(carpetaId, nombreArchivo, rutaOriginal, rutaThumbnail, rutaWeb, descripcion || '');
+    .run(carpetaId, tipo || 'foto', nombreArchivo, rutaOriginal, rutaThumbnail, rutaWeb, descripcion || '');
   return buscarPorId(info.lastInsertRowid);
 }
 

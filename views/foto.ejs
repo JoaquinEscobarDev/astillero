@@ -4,17 +4,24 @@
   <a href="/carpetas/<%= carpeta.id %>" class="enlace-volver">&larr; Volver a <%= carpeta.nombre %></a>
 
   <div class="detalle-foto">
-    <img src="/media/web/<%= foto.ruta_web %>" alt="<%= foto.descripcion || carpeta.nombre %>" class="detalle-foto-imagen fade-in" />
-    <a href="/media/original/<%= foto.ruta_original %>" class="boton boton-secundario" target="_blank" rel="noopener">Ver tamaño completo</a>
+    <% if (foto.tipo === 'video') { %>
+      <video src="/media/original/<%= foto.ruta_original %>" controls class="detalle-foto-imagen fade-in"></video>
+    <% } else { %>
+      <img src="/media/web/<%= foto.ruta_web %>" alt="<%= foto.descripcion || carpeta.nombre %>" class="detalle-foto-imagen fade-in" />
+      <a href="/media/original/<%= foto.ruta_original %>" class="boton boton-secundario" target="_blank" rel="noopener">Ver tamaño completo</a>
+    <% } %>
 
-    <p class="detalle-foto-fecha">Subida el <%= new Date(foto.fecha_subida.replace(' ', 'T') + 'Z').toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+    <p class="detalle-foto-fecha">
+      <%= foto.tipo === 'video' ? 'Subido' : 'Subida' %> el
+      <%= new Date(foto.fecha_subida.replace(' ', 'T') + 'Z').toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+    </p>
 
     <p><%= foto.descripcion || 'Sin descripción todavía.' %></p>
 
     <% if (estaAutenticado) { %>
       <div class="detalle-foto-acciones">
         <a href="/fotos/<%= foto.id %>/editar" class="boton boton-secundario">Editar descripción</a>
-        <a href="/fotos/<%= foto.id %>/eliminar" class="boton boton-peligro">Borrar foto</a>
+        <a href="/fotos/<%= foto.id %>/eliminar" class="boton boton-peligro"><%= foto.tipo === 'video' ? 'Borrar video' : 'Borrar foto' %></a>
       </div>
     <% } %>
   </div>

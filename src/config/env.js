@@ -18,13 +18,19 @@ for (const subcarpeta of ['original', 'thumb', 'web']) {
   fs.mkdirSync(path.join(directorioStorage, subcarpeta), { recursive: true });
 }
 
+const maxFotoMB = parseInt(requerido('MAX_FOTO_MB', '40'), 10);
+const maxVideoMB = parseInt(requerido('MAX_VIDEO_MB', '200'), 10);
+
 module.exports = {
   raiz,
   puerto: parseInt(requerido('PORT', '3000'), 10),
   sessionSecret: requerido('SESSION_SECRET'),
   csrfSecret: requerido('CSRF_SECRET'),
   archivoBaseDeDatos: path.resolve(raiz, requerido('DATABASE_FILE', './data/astillero.sqlite')),
-  maxFotoBytes: parseInt(requerido('MAX_FOTO_MB', '40'), 10) * 1024 * 1024,
+  maxFotoMB,
+  maxVideoMB,
+  maxFotoBytes: maxFotoMB * 1024 * 1024,
+  maxVideoBytes: maxVideoMB * 1024 * 1024,
   cookiesSeguras: requerido('COOKIES_SEGURAS', 'false') === 'true',
   rutas: {
     original: path.join(directorioStorage, 'original'),

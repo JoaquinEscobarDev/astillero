@@ -4,7 +4,7 @@ const { upload, manejarErrorDeSubida } = require('../middleware/upload');
 const { doubleCsrfProtection } = require('../middleware/csrf');
 const carpetaModel = require('../models/carpetaModel');
 const fotoModel = require('../models/fotoModel');
-const { procesarYGuardarFoto, eliminarArchivosDeFoto, FotoInvalidaError } = require('../services/imageService');
+const { procesarYGuardarArchivo, eliminarArchivosDeFoto, FotoInvalidaError } = require('../services/mediaService');
 
 const router = express.Router();
 
@@ -28,7 +28,7 @@ router.post(
 
     const archivos = req.files || [];
     if (archivos.length === 0) {
-      req.session.mensajeError = 'No se selecciono ninguna foto para subir.';
+      req.session.mensajeError = 'No se selecciono ningun archivo para subir.';
       return res.redirect(`/carpetas/${carpeta.id}`);
     }
 
@@ -37,9 +37,10 @@ router.post(
 
     for (const archivo of archivos) {
       try {
-        const resultado = await procesarYGuardarFoto(archivo.buffer);
+        const resultado = await procesarYGuardarArchivo(archivo.path);
         fotoModel.crear({
           carpetaId: carpeta.id,
+          tipo: resultado.tipo,
           nombreArchivo: resultado.nombreArchivo,
           rutaOriginal: resultado.rutaOriginal,
           rutaThumbnail: resultado.rutaThumbnail,
@@ -51,14 +52,14 @@ router.post(
         if (error instanceof FotoInvalidaError) {
           ultimoError = error.mensajeParaElUsuario;
         } else {
-          ultimoError = 'Una de las fotos no se pudo procesar. Intenta de nuevo.';
+          ultimoError = 'Uno de los archivos no se pudo procesar. Intenta de nuevo.';
         }
       }
     }
 
     if (subidas > 0) {
       req.session.mensajeExito =
-        subidas === 1 ? 'Se subio 1 foto.' : `Se subieron ${subidas} fotos.`;
+        subidas === 1 ? 'Se subio 1 archivo.' : `Se subieron ${subidas} archivos.`;
     }
     if (ultimoError) {
       req.session.mensajeError = ultimoError;

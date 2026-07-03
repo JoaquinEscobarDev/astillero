@@ -12,4 +12,10 @@ db.pragma('foreign_keys = ON');
 const esquema = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8');
 db.exec(esquema);
 
+const columnasFotos = db.prepare("PRAGMA table_info(fotos)").all();
+const tieneTipo = columnasFotos.some((columna) => columna.name === 'tipo');
+if (!tieneTipo) {
+  db.exec("ALTER TABLE fotos ADD COLUMN tipo TEXT NOT NULL DEFAULT 'foto'");
+}
+
 module.exports = db;

@@ -12,9 +12,9 @@
     if (cantidad === 0) {
       textoOriginal.textContent = textoBase;
     } else if (cantidad === 1) {
-      textoOriginal.textContent = '1 foto lista para subir';
+      textoOriginal.textContent = '1 archivo listo para subir';
     } else {
-      textoOriginal.textContent = cantidad + ' fotos listas para subir';
+      textoOriginal.textContent = cantidad + ' archivos listos para subir';
     }
   }
 

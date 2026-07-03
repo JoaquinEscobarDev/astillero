@@ -3,7 +3,7 @@ const { requiereSesion } = require('../middleware/auth');
 const { doubleCsrfProtection } = require('../middleware/csrf');
 const carpetaModel = require('../models/carpetaModel');
 const fotoModel = require('../models/fotoModel');
-const { eliminarArchivosDeFoto } = require('../services/imageService');
+const { eliminarArchivosDeFoto } = require('../services/mediaService');
 
 const router = express.Router();
 
