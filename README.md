@@ -130,7 +130,7 @@ usuario), para que sobrevivan a los redespliegues.
   táctiles amplios (mínimo 44x44px), sin pasos ocultos, y confirmaciones explícitas ("Sí" / "No")
   antes de borrar cualquier cosa.
 - El límite técnico de tamaño (`MAX_FOTO_MB`, 40MB por defecto para fotos; `MAX_VIDEO_MB`,
-  200MB por defecto para videos) es solo una protección del servidor; el usuario nunca necesita
+  500MB por defecto para videos) es solo una protección del servidor; el usuario nunca necesita
   pensar en el peso del archivo.
 - La columna `descripcion` de la tabla `fotos` queda lista para que, en una fase futura, se
   autocomplete con IA (ver la sección 9 del documento de requisitos original). No hay ninguna

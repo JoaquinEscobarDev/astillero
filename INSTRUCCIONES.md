@@ -32,7 +32,7 @@ Esta es una guía simple para usar la página donde guardamos las fotos y videos
 5. Aprieta el botón **"Subir"**.
 6. Espera un momento (los videos tardan un poco más que las fotos). La página va a avisarte cuando quedó guardado.
 
-No te preocupes por el tamaño: la página lo prepara sola. Eso sí, un video no puede pesar más de 200 MB (unos pocos minutos de grabación); si es muy pesado, la página te va a avisar.
+No te preocupes por el tamaño: la página lo prepara sola. Eso sí, un video no puede pesar más de 500 MB (unos 4 minutos de grabación); si es muy pesado, la página te va a avisar.
 
 ## Escribir una descripción a una foto o video
 

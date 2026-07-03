@@ -19,7 +19,7 @@ for (const subcarpeta of ['original', 'thumb', 'web']) {
 }
 
 const maxFotoMB = parseInt(requerido('MAX_FOTO_MB', '40'), 10);
-const maxVideoMB = parseInt(requerido('MAX_VIDEO_MB', '200'), 10);
+const maxVideoMB = parseInt(requerido('MAX_VIDEO_MB', '500'), 10);
 
 module.exports = {
   raiz,
