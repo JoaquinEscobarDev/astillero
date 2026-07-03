@@ -1,0 +1,22 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+  <div class="tarjeta tarjeta-angosta">
+    <h1>Ingresar</h1>
+    <% if (mensajeError) { %>
+      <p class="mensaje mensaje-error" role="alert"><%= mensajeError %></p>
+    <% } %>
+    <form action="/ingresar" method="POST" class="formulario">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+      <label for="usuario">Usuario</label>
+      <input type="text" id="usuario" name="usuario" autocomplete="username" required autofocus />
+
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" name="password" autocomplete="current-password" required />
+
+      <button type="submit" class="boton boton-primario boton-grande">Entrar</button>
+    </form>
+  </div>
+
+<%- include('partials/pie') %>

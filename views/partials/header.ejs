@@ -1,0 +1,25 @@
+  <header class="cabecera">
+    <a href="/" class="cabecera-marca">
+      <svg class="icono-ancla" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M12 2a2.5 2.5 0 1 0-2.5 2.5V6H7a1 1 0 0 0 0 2h2.5v9.9a5 5 0 0 1-3.8-3.53 1 1 0 1 0-1.94.48A7 7 0 0 0 11 21.95V21a1 1 0 0 0 2 0v.95a7 7 0 0 0 7.24-6.15 1 1 0 1 0-1.94-.48 5 5 0 0 1-3.8 3.53V8H17a1 1 0 0 0 0-2h-2.5V4.5A2.5 2.5 0 0 0 12 2Z" fill="currentColor"/>
+      </svg>
+      <span>El Astillero</span>
+    </a>
+    <% if (typeof estaAutenticado !== 'undefined' && estaAutenticado) { %>
+      <nav class="cabecera-nav">
+        <a href="/" class="boton boton-secundario">Inicio</a>
+        <form action="/salir" method="POST">
+          <input type="hidden" name="_csrf" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>" />
+          <button type="submit" class="boton boton-secundario">Salir</button>
+        </form>
+      </nav>
+    <% } %>
+  </header>
+  <div class="separador-cuerda" aria-hidden="true"></div>
+  <main class="contenido">
+    <% if (typeof mensajeExito !== 'undefined' && mensajeExito) { %>
+      <p class="mensaje mensaje-exito" role="status"><%= mensajeExito %></p>
+    <% } %>
+    <% if (typeof mensajeError !== 'undefined' && mensajeError) { %>
+      <p class="mensaje mensaje-error" role="alert"><%= mensajeError %></p>
+    <% } %>

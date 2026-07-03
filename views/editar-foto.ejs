@@ -1,0 +1,17 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+  <a href="/fotos/<%= foto.id %>" class="enlace-volver">&larr; Volver a la foto</a>
+
+  <div class="tarjeta tarjeta-angosta">
+    <h1>Editar descripción</h1>
+    <img src="/media/thumb/<%= foto.ruta_thumbnail %>" alt="" class="vista-previa-chica" />
+    <form action="/fotos/<%= foto.id %>/editar" method="POST" class="formulario">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <label for="descripcion">Descripción (opcional)</label>
+      <textarea id="descripcion" name="descripcion" rows="5" placeholder="Cuenta algo sobre este bote..."><%= foto.descripcion %></textarea>
+      <button type="submit" class="boton boton-primario boton-grande">Guardar</button>
+    </form>
+  </div>
+
+<%- include('partials/pie') %>

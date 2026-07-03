@@ -1,0 +1,16 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+  <a href="/carpetas/<%= carpeta.id %>" class="enlace-volver">&larr; Volver a <%= carpeta.nombre %></a>
+
+  <div class="tarjeta tarjeta-angosta">
+    <h1>Cambiar nombre de la carpeta</h1>
+    <form action="/carpetas/<%= carpeta.id %>/renombrar" method="POST" class="formulario">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <label for="nombre">Nuevo nombre</label>
+      <input type="text" id="nombre" name="nombre" value="<%= carpeta.nombre %>" required autofocus />
+      <button type="submit" class="boton boton-primario boton-grande">Guardar</button>
+    </form>
+  </div>
+
+<%- include('partials/pie') %>

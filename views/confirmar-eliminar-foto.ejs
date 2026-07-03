@@ -1,0 +1,17 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+  <div class="tarjeta tarjeta-angosta tarjeta-confirmar">
+    <h1>¿Seguro que quieres borrar esta foto?</h1>
+    <img src="/media/thumb/<%= foto.ruta_thumbnail %>" alt="" class="vista-previa-chica" />
+    <p class="texto-ayuda">Esto no se puede deshacer.</p>
+    <div class="confirmar-acciones">
+      <form action="/fotos/<%= foto.id %>/eliminar" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <button type="submit" class="boton boton-peligro boton-grande">Sí, borrar</button>
+      </form>
+      <a href="/fotos/<%= foto.id %>" class="boton boton-secundario boton-grande">No, volver</a>
+    </div>
+  </div>
+
+<%- include('partials/pie') %>

@@ -1,0 +1,30 @@
+{
+  "name": "astillero-galeria",
+  "version": "1.0.0",
+  "description": "Galeria personal de botes a escala en madera",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "crear-usuario": "node src/scripts/crear-usuario.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.3.0",
+    "cookie-parser": "^1.4.7",
+    "csrf-csrf": "^3.0.6",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "express-session": "^1.18.0",
+    "file-type": "^12.4.2",
+    "helmet": "^7.1.0",
+    "multer": "^2.0.0",
+    "sharp": "^0.33.5"
+  }
+}

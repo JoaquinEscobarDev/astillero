@@ -1,0 +1,18 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+  <div class="tarjeta tarjeta-angosta tarjeta-confirmar">
+    <h1>¿Seguro que quieres borrar esta carpeta?</h1>
+    <p class="texto-ayuda">
+      Se borrará la carpeta "<strong><%= carpeta.nombre %></strong>" y todas sus fotos. Esto no se puede deshacer.
+    </p>
+    <div class="confirmar-acciones">
+      <form action="/carpetas/<%= carpeta.id %>/eliminar" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <button type="submit" class="boton boton-peligro boton-grande">Sí, borrar</button>
+      </form>
+      <a href="/carpetas/<%= carpeta.id %>" class="boton boton-secundario boton-grande">No, volver</a>
+    </div>
+  </div>
+
+<%- include('partials/pie') %>
