@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
@@ -11,6 +12,11 @@ function requerido(nombre, porDefecto) {
 }
 
 const raiz = path.resolve(__dirname, '..', '..');
+const directorioStorage = path.resolve(raiz, requerido('STORAGE_DIR', './storage'));
+
+for (const subcarpeta of ['original', 'thumb', 'web']) {
+  fs.mkdirSync(path.join(directorioStorage, subcarpeta), { recursive: true });
+}
 
 module.exports = {
   raiz,
@@ -21,8 +27,8 @@ module.exports = {
   maxFotoBytes: parseInt(requerido('MAX_FOTO_MB', '40'), 10) * 1024 * 1024,
   cookiesSeguras: requerido('COOKIES_SEGURAS', 'false') === 'true',
   rutas: {
-    original: path.join(raiz, 'storage', 'original'),
-    thumb: path.join(raiz, 'storage', 'thumb'),
-    web: path.join(raiz, 'storage', 'web'),
+    original: path.join(directorioStorage, 'original'),
+    thumb: path.join(directorioStorage, 'thumb'),
+    web: path.join(directorioStorage, 'web'),
   },
 };

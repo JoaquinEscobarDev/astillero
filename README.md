@@ -67,25 +67,47 @@ data/                        Base de datos SQLite (no se sube al repositorio)
 
 ## Despliegue en Hostinger (App de Node.js)
 
+**Importante — persistencia de datos:** cada vez que se hace "Redesplegar" desde el panel de
+Hostinger, la carpeta de la app se reemplaza por una copia limpia del repositorio de GitHub.
+Cualquier archivo que no esté en el repositorio (como la base de datos SQLite o las fotos
+subidas) **se borra** si vive dentro de esa carpeta. Por eso `DATABASE_FILE` y `STORAGE_DIR`
+deben apuntar a una carpeta **fuera** de la carpeta de la app (ej. directamente en el home del
+usuario), para que sobrevivan a los redespliegues.
+
 1. En hPanel, crea una nueva "Aplicación de Node.js" y conéctala a este repositorio de GitHub
    (o sube los archivos directamente).
-2. Define las variables de entorno del archivo `.env.example` en la configuración de la app
-   (nunca subas el archivo `.env` real al repositorio).
-3. Pon `COOKIES_SEGURAS=true` una vez que el sitio tenga HTTPS activo (Hostinger ofrece SSL
+2. Por SSH, crea una carpeta persistente fuera de la app, por ejemplo:
+   ```bash
+   mkdir -p ~/astillero-datos/storage
+   ```
+3. Define las variables de entorno de `.env.example` en la sección "Variables de entorno" del
+   panel de la app (nunca subas el archivo `.env` real al repositorio). En particular:
+   - `DATABASE_FILE=/home/tu_usuario/astillero-datos/astillero.sqlite`
+   - `STORAGE_DIR=/home/tu_usuario/astillero-datos/storage`
+
+   (Reemplaza `tu_usuario` por tu usuario real de Hostinger — lo ves en el prompt de la
+   terminal SSH, ej. `u974181638`.)
+4. Pon `COOKIES_SEGURAS=true` una vez que el sitio tenga HTTPS activo (Hostinger ofrece SSL
    gratis con Let's Encrypt — actívalo en el panel del dominio).
-4. El comando de inicio es `npm start` (usa `server.js`).
-5. Ejecuta una vez `npm run crear-usuario -- <usuario> "<Nombre>" <contraseña> dueno` desde la
-   terminal de la app para crear la cuenta real.
-6. Verifica que las carpetas `data/` y `storage/` tengan permisos de escritura y que
-   `storage/` no tenga permisos de ejecución de scripts.
+5. El comando de inicio es `npm start` (usa `server.js`).
+6. Para ejecutar comandos sueltos (como crear un usuario) desde la terminal SSH de Hostinger,
+   como esas variables de entorno del panel no se cargan automáticamente en la sesión SSH,
+   crea un `.env` temporal dentro de la carpeta de la app con los mismos valores (se puede
+   borrar después; solo lo necesitan los comandos manuales, no la app en si) y luego corre:
+   ```bash
+   npm run crear-usuario -- <usuario> "<Nombre>" <contraseña> dueno
+   ```
+7. Verifica que la carpeta persistente (`~/astillero-datos`) tenga permisos de escritura y que
+   no tenga permisos de ejecución de scripts.
 
 ### Respaldos
 
-- La base de datos completa es un solo archivo: `data/astillero.sqlite`. Respaldarla es copiar
-  ese archivo (hazlo con el sitio detenido o usando `sqlite3 data/astillero.sqlite ".backup respaldo.sqlite"`
-  para un respaldo en caliente sin bloquear la app).
-- Las fotos originales están en `storage/original/`. Progrma un respaldo periódico (cron de
-  Hostinger o descarga manual) de esa carpeta junto con `data/astillero.sqlite`.
+- La base de datos completa es un solo archivo (la ruta de `DATABASE_FILE`). Respaldarla es
+  copiar ese archivo (hazlo con el sitio detenido o usando
+  `sqlite3 astillero.sqlite ".backup respaldo.sqlite"` para un respaldo en caliente sin bloquear
+  la app).
+- Las fotos originales están en `<STORAGE_DIR>/original/`. Programa un respaldo periódico (cron
+  de Hostinger o descarga manual) de esa carpeta junto con la base de datos.
 
 ## Notas de diseño
 
