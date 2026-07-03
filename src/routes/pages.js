@@ -1,11 +1,8 @@
 const express = require('express');
-const { requiereSesion } = require('../middleware/auth');
 const carpetaModel = require('../models/carpetaModel');
 const fotoModel = require('../models/fotoModel');
 
 const router = express.Router();
-
-router.use(requiereSesion);
 
 function tomarMensajes(req) {
   const mensajeError = req.session.mensajeError || null;

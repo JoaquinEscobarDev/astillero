@@ -11,10 +11,12 @@
 
     <p><%= foto.descripcion || 'Sin descripción todavía.' %></p>
 
-    <div class="detalle-foto-acciones">
-      <a href="/fotos/<%= foto.id %>/editar" class="boton boton-secundario">Editar descripción</a>
-      <a href="/fotos/<%= foto.id %>/eliminar" class="boton boton-peligro">Borrar foto</a>
-    </div>
+    <% if (estaAutenticado) { %>
+      <div class="detalle-foto-acciones">
+        <a href="/fotos/<%= foto.id %>/editar" class="boton boton-secundario">Editar descripción</a>
+        <a href="/fotos/<%= foto.id %>/eliminar" class="boton boton-peligro">Borrar foto</a>
+      </div>
+    <% } %>
   </div>
 
 <%- include('partials/pie') %>

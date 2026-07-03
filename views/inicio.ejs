@@ -1,8 +1,13 @@
 <%- include('partials/head') %>
 <%- include('partials/header') %>
 
-  <h1>Hola, <%= nombreUsuarioSesion %></h1>
-  <p class="texto-ayuda">Aquí están tus carpetas de botes. Toca una para ver las fotos.</p>
+  <% if (estaAutenticado) { %>
+    <h1>Hola, <%= nombreUsuarioSesion %></h1>
+    <p class="texto-ayuda">Aquí están tus carpetas de botes. Toca una para ver las fotos.</p>
+  <% } else { %>
+    <h1>El Astillero</h1>
+    <p class="texto-ayuda">Galería de botes a escala en madera. Toca una carpeta para ver las fotos.</p>
+  <% } %>
 
   <div class="grilla-carpetas">
     <% carpetas.forEach(function (carpeta) { %>
@@ -20,23 +25,27 @@
           <p class="tarjeta-carpeta-nombre"><%= carpeta.nombre %></p>
           <p class="tarjeta-carpeta-total"><%= carpeta.total_fotos %> foto<%= carpeta.total_fotos === 1 ? '' : 's' %></p>
         </a>
-        <div class="tarjeta-carpeta-acciones">
-          <a href="/carpetas/<%= carpeta.id %>/renombrar" class="boton boton-secundario boton-chico">Cambiar nombre</a>
-          <a href="/carpetas/<%= carpeta.id %>/eliminar" class="boton boton-peligro boton-chico">Borrar</a>
-        </div>
+        <% if (estaAutenticado) { %>
+          <div class="tarjeta-carpeta-acciones">
+            <a href="/carpetas/<%= carpeta.id %>/renombrar" class="boton boton-secundario boton-chico">Cambiar nombre</a>
+            <a href="/carpetas/<%= carpeta.id %>/eliminar" class="boton boton-peligro boton-chico">Borrar</a>
+          </div>
+        <% } %>
       </div>
     <% }); %>
   </div>
 
-  <div class="tarjeta tarjeta-angosta">
-    <h2>Crear una carpeta nueva</h2>
-    <p class="texto-ayuda">Por ejemplo: "Goleta 1920" o "Bote pesquero chilote".</p>
-    <form action="/carpetas" method="POST" class="formulario formulario-en-linea">
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-      <label for="nombre" class="visualmente-oculto">Nombre de la carpeta</label>
-      <input type="text" id="nombre" name="nombre" placeholder="Nombre del proyecto de bote" required />
-      <button type="submit" class="boton boton-primario">Crear carpeta</button>
-    </form>
-  </div>
+  <% if (estaAutenticado) { %>
+    <div class="tarjeta tarjeta-angosta">
+      <h2>Crear una carpeta nueva</h2>
+      <p class="texto-ayuda">Por ejemplo: "Goleta 1920" o "Bote pesquero chilote".</p>
+      <form action="/carpetas" method="POST" class="formulario formulario-en-linea">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <label for="nombre" class="visualmente-oculto">Nombre de la carpeta</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Nombre del proyecto de bote" required />
+        <button type="submit" class="boton boton-primario">Crear carpeta</button>
+      </form>
+    </div>
+  <% } %>
 
 <%- include('partials/pie') %>

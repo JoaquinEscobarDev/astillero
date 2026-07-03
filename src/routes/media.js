@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const { requiereSesion } = require('../middleware/auth');
 const env = require('../config/env');
 
 const router = express.Router();
@@ -11,7 +10,7 @@ const CARPETAS_POR_TIPO = {
   original: env.rutas.original,
 };
 
-router.get('/media/:tipo/:archivo', requiereSesion, (req, res) => {
+router.get('/media/:tipo/:archivo', (req, res) => {
   const carpeta = CARPETAS_POR_TIPO[req.params.tipo];
   if (!carpeta) {
     return res.status(404).end();

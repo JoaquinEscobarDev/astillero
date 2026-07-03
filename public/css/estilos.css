@@ -297,6 +297,10 @@ form {
   margin-bottom: 1rem;
 }
 
+.texto-centrado {
+  text-align: center;
+}
+
 .enlace-volver {
   display: inline-block;
   margin-bottom: 1rem;
