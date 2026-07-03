@@ -346,6 +346,27 @@ form {
   opacity: 0;
 }
 
+.barra-progreso {
+  width: 100%;
+  height: 26px;
+  background: #e5d9bf;
+  border-radius: var(--radio);
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--madera);
+}
+
+.barra-progreso.oculto {
+  display: none;
+}
+
+.barra-progreso-relleno {
+  height: 100%;
+  width: 0%;
+  background: var(--oxido);
+  transition: width 0.2s ease;
+}
+
 /* Grillas */
 
 .grilla-carpetas {

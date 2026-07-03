@@ -1,6 +1,7 @@
 const express = require('express');
 const carpetaModel = require('../models/carpetaModel');
 const fotoModel = require('../models/fotoModel');
+const { MAX_ARCHIVOS_POR_SUBIDA } = require('../middleware/upload');
 
 const router = express.Router();
 
@@ -32,6 +33,7 @@ router.get('/carpetas/:id', (req, res) => {
     titulo: carpeta.nombre,
     carpeta,
     fotos,
+    maxArchivosPorSubida: MAX_ARCHIVOS_POR_SUBIDA,
     ...tomarMensajes(req),
   });
 });

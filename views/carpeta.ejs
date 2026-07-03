@@ -9,6 +9,7 @@
       <h2>Subir fotos y videos</h2>
       <p class="texto-ayuda">
         Elige fotos o videos desde tu celular. No te preocupes por el tamaño, la página los prepara sola.
+        Puedes subir hasta <%= maxArchivosPorSubida %> archivos a la vez; si tienes más, súbelos en varias tandas.
       </p>
       <form action="/carpetas/<%= carpeta.id %>/fotos" method="POST" enctype="multipart/form-data" class="formulario" id="formulario-subida">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
@@ -16,6 +17,10 @@
           <span>Toca aquí para elegir fotos o videos, o arrástralos a esta zona</span>
           <input type="file" id="fotos" name="fotos" accept="image/*,video/*" multiple />
         </label>
+        <div class="barra-progreso oculto" id="barra-progreso">
+          <div class="barra-progreso-relleno" id="barra-progreso-relleno"></div>
+        </div>
+        <p class="texto-ayuda" id="texto-progreso" aria-live="polite"></p>
         <button type="submit" class="boton boton-primario boton-grande">Subir</button>
       </form>
     </div>
