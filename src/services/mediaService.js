@@ -124,6 +124,29 @@ async function procesarVideo(rutaTemporal, extension) {
   };
 }
 
+async function transcodificarVideoCompatible(rutaOriginalCompleta, nombreWebDestino) {
+  await ejecutarFfmpeg([
+    '-y',
+    '-i',
+    rutaOriginalCompleta,
+    '-c:v',
+    'libx264',
+    '-preset',
+    'veryfast',
+    '-crf',
+    '25',
+    '-vf',
+    "scale='min(1280,iw)':-2",
+    '-c:a',
+    'aac',
+    '-b:a',
+    '128k',
+    '-movflags',
+    '+faststart',
+    path.join(env.rutas.web, nombreWebDestino),
+  ]);
+}
+
 async function procesarYGuardarArchivo(rutaTemporal) {
   const tipoDetectado = await detectarTipoArchivo(rutaTemporal);
 
@@ -163,12 +186,19 @@ async function procesarYGuardarArchivo(rutaTemporal) {
 }
 
 async function eliminarArchivosDeFoto(foto) {
-  const rutas = [
-    path.join(env.rutas.original, foto.ruta_original),
-    foto.ruta_thumbnail ? path.join(env.rutas.thumb, foto.ruta_thumbnail) : null,
-    foto.tipo === 'video' ? null : path.join(env.rutas.web, foto.ruta_web),
-  ].filter(Boolean);
+  const rutas = [path.join(env.rutas.original, foto.ruta_original)];
+  if (foto.ruta_thumbnail) {
+    rutas.push(path.join(env.rutas.thumb, foto.ruta_thumbnail));
+  }
+  if (foto.tipo !== 'video' || (foto.ruta_web && foto.ruta_web !== foto.ruta_original)) {
+    rutas.push(path.join(env.rutas.web, foto.ruta_web));
+  }
   await Promise.all(rutas.map((ruta) => fs.unlink(ruta).catch(() => {})));
 }
 
-module.exports = { procesarYGuardarArchivo, eliminarArchivosDeFoto, FotoInvalidaError };
+module.exports = {
+  procesarYGuardarArchivo,
+  transcodificarVideoCompatible,
+  eliminarArchivosDeFoto,
+  FotoInvalidaError,
+};

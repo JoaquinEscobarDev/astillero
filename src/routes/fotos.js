@@ -1,10 +1,18 @@
+const path = require('path');
 const express = require('express');
 const { requiereSesion } = require('../middleware/auth');
 const { upload, manejarErrorDeSubida } = require('../middleware/upload');
 const { doubleCsrfProtection } = require('../middleware/csrf');
 const carpetaModel = require('../models/carpetaModel');
 const fotoModel = require('../models/fotoModel');
-const { procesarYGuardarArchivo, eliminarArchivosDeFoto, FotoInvalidaError } = require('../services/mediaService');
+const {
+  procesarYGuardarArchivo,
+  transcodificarVideoCompatible,
+  eliminarArchivosDeFoto,
+  FotoInvalidaError,
+} = require('../services/mediaService');
+const colaTranscodificacion = require('../services/colaTranscodificacion');
+const env = require('../config/env');
 
 const router = express.Router();
 
@@ -38,7 +46,8 @@ router.post(
     for (const archivo of archivos) {
       try {
         const resultado = await procesarYGuardarArchivo(archivo.path);
-        fotoModel.crear({
+        const esVideo = resultado.tipo === 'video';
+        const fotoCreada = fotoModel.crear({
           carpetaId: carpeta.id,
           tipo: resultado.tipo,
           nombreArchivo: resultado.nombreArchivo,
@@ -46,7 +55,19 @@ router.post(
           rutaThumbnail: resultado.rutaThumbnail,
           rutaWeb: resultado.rutaWeb,
           descripcion: '',
+          procesando: esVideo,
         });
+
+        if (esVideo) {
+          const nombreWebDestino = `web-${resultado.nombreArchivo}.mp4`;
+          const rutaOriginalCompleta = path.join(env.rutas.original, resultado.rutaOriginal);
+          colaTranscodificacion.encolar(() =>
+            transcodificarVideoCompatible(rutaOriginalCompleta, nombreWebDestino)
+              .then(() => fotoModel.marcarListo(fotoCreada.id, nombreWebDestino))
+              .catch(() => {})
+          );
+        }
+
         subidas += 1;
       } catch (error) {
         if (error instanceof FotoInvalidaError) {

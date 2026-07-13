@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS fotos (
   ruta_web TEXT NOT NULL,
   descripcion TEXT DEFAULT '',
   fecha_subida TEXT NOT NULL DEFAULT (datetime('now')),
-  orden INTEGER NOT NULL DEFAULT 0
+  orden INTEGER NOT NULL DEFAULT 0,
+  procesando INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE INDEX IF NOT EXISTS idx_carpetas_usuario ON carpetas(usuario_id);

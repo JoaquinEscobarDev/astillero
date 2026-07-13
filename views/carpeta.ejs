@@ -45,6 +45,9 @@
         <% if (foto.tipo === 'video') { %>
           <span class="icono-reproducir" aria-hidden="true">&#9654;</span>
         <% } %>
+        <% if (foto.procesando) { %>
+          <span class="etiqueta-procesando">Preparando...</span>
+        <% } %>
       </a>
     <% }); %>
   </div>

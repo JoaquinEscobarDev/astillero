@@ -5,7 +5,18 @@
 
   <div class="detalle-foto">
     <% if (foto.tipo === 'video') { %>
-      <video src="/media/original/<%= foto.ruta_original %>" controls class="detalle-foto-imagen fade-in"></video>
+      <video
+        src="<%= foto.procesando ? '/media/original/' + foto.ruta_original : '/media/web/' + foto.ruta_web %>"
+        controls
+        class="detalle-foto-imagen fade-in"
+      ></video>
+      <% if (foto.procesando) { %>
+        <p class="texto-ayuda">
+          Este video se está preparando para que se vea bien en todos los celulares. Puede tardar
+          unos minutos; mientras tanto quizás no se reproduzca en tu navegador. Vuelve a entrar a
+          esta página en un rato.
+        </p>
+      <% } %>
     <% } else { %>
       <img src="/media/web/<%= foto.ruta_web %>" alt="<%= foto.descripcion || carpeta.nombre %>" class="detalle-foto-imagen fade-in" />
       <a href="/media/original/<%= foto.ruta_original %>" class="boton boton-secundario" target="_blank" rel="noopener">Ver tamaño completo</a>
